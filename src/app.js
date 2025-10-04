@@ -7,6 +7,7 @@ const port = 3000
 
 
 const userRoutes = require('./routes/userRoutes')
+const roleRoutes = require('./routes/roleRoutes')
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -17,6 +18,9 @@ app.get('/', (req, res) => {
 
 // USER
 app.use('/auth', userRoutes)
+
+// ROLE
+app.use('/role', roleRoutes)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
