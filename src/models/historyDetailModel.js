@@ -1,43 +1,45 @@
 'use Strict'
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-    class dataLabModel extends Model {
+    class historyDetailModel extends Model {
         static associate(models) {
-            this.belongsTo(models.barangModel, {foreignKey: 'idBarang'})
-            this.belongsTo(models.ruangLabModel, {foreignKey: 'idLab'})
-            this.hasMany(models.historyDetailModel, {foreignKey: 'idDataLab'})
+            this.belongsTo(models.historyKegiatanModel, {foreignKey: 'idHistory'})
+            this.belongsTo(models.dataLabModel, {foreignKey: 'idDataLab'})
         }
     }
-    dataLabModel.init({
+    historyDetailModel.init({
+        idHistoryDetail: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        idHistory: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            references: {
+                model: 'historykegiatan-table',
+                key: 'idHistory',
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE'
+        },
         idDataLab: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
-            primaryKey: true
-        },
-        idLab: {
-            type: DataTypes.STRING,
-            allowNull: false,
             references: {
-                model: 'ruanglab-table',
-                key: 'idLab'
+                model: 'datalab-table',
+                key: 'idDataLab'
             },
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE'
         },
-        idBarang: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            references: {
-                model: 'barang-table',
-                key: 'idBarang'
-            },
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE'
-        },
-        jumlahNormal: {
+        jumlahAwal: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: false
+        },
+        jumlahAkhir: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
         jumlahRusak: {
             type: DataTypes.INTEGER,
@@ -53,11 +55,6 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: sequelize.literal("CURRENT_TIMESTAMP")
         }
-    }, {
-        sequelize,
-        modelName: 'dataLabModel',
-        tableName: 'datalab-table',
-        timestamps: true
     })
-    return dataLabModel
+    return historyDetailModel
 }

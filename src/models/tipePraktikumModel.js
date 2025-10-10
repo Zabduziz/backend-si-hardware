@@ -1,20 +1,19 @@
 'use Strict'
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-    class ruangLabModel extends Model {
+    class tipePraktikumModel extends Model {
         static associate(models) {
-            this.hasMany(models.dataLabModel, {foreignKey: 'idLab'})
-            this.hasMany(models.historyKegiatanModel, {foreignKey: 'idLab'})
+            this.hasMany(models.historyKegiatanModel, {foreignKey: 'idPraktikum'})
         }
     }
-    ruangLabModel.init({
-        idLab: {
+    tipePraktikumModel.init({
+        idPraktikum: {
             type: DataTypes.STRING,
             unique: true,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
         },
-        ruanganLab: {
+        namaPraktikum: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -28,11 +27,6 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: sequelize.literal("CURRENT_TIMESTAMP")
         }
-    }, {
-        sequelize,
-        modelName: 'ruangLabModel',
-        tableName: 'ruanglab-table',
-        timestamps: true
     })
-    return ruangLabModel
+    return tipePraktikumModel
 }

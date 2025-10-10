@@ -9,6 +9,7 @@ const port = 3000
 const userRoutes = require('./routes/userRoutes')
 const roleRoutes = require('./routes/roleRoutes')
 const dataLabRoutes = require('./routes/dataLabRoutes')
+const praktikumRoutes = require('./routes/praktikumRoutes')
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -25,6 +26,9 @@ app.use('/role', roleRoutes)
 
 // DATALAB
 app.use('/datalab', dataLabRoutes)
+
+// ACTIVITY FOR ASSISTANT
+app.use('/praktikum', praktikumRoutes)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
