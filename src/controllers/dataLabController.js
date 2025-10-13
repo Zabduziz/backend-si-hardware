@@ -1,4 +1,4 @@
-const { dataLabModel } = require('../models')
+const { dataLabModel, barangModel } = require('../models')
 const { Op } = require('sequelize')
 
 const updateDataLab = async (req, res) => {
@@ -42,12 +42,16 @@ const updateDataLab = async (req, res) => {
 
 const getAllDataLab = async (req, res) => {
     const { idLab } = req.params
-    if (req.user.idRole !== 'ADM') { return res.status(403).send({ message: "You are not authorized!" }) }
     if (!idLab) { return res.status(400).send({ message: "Please insert idLab in the field!" }) }
     try {
         const listAllDataLab = await dataLabModel.findAll({
             where: {idLab: idLab},
-            attributes: ['idDataLab', 'jumlahNormal', 'jumlahRusak']
+            attributes: ['idBarang','jumlahNormal', 'jumlahRusak'],
+            include: [{
+                model: barangModel,
+                attributes: ['namaBarang']
+            }],
+            order: [['idDataLab', 'ASC']]
         })
         res.status(200).json({ message: "Get all data successfully!", data: listAllDataLab })
     } catch (e) {

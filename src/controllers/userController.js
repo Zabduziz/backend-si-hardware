@@ -108,8 +108,46 @@ const updateStatus = async (req, res) => {
     }
 }
 
+const getAllUsers = async(req, res) => {
+    const role = req.user.idRole
+    if (role !== 'ADM') { return res.status(403).json({ message: "You are not Admin!" }) }
+    try {
+        const allUsers = await userModel.findAll({
+            attributes: ['idUser', 'idRole', 'email', 'nama', 'nim', 'isActive']
+        })
+        res.status(200).json({
+            message: 'Successfully get all users',
+            data: allUsers
+        })
+    } catch (e) {
+        console.error(e.message)
+        res.status(500).json({ message: e.message })
+    }
+}
+
+const getInfo = async(req, res) => {
+    const idUser = req.user.idUser
+    try {
+        const info = await userModel.findOne({
+            where: {
+                idUser: idUser
+            },
+            attributes: ['nim', 'nama', 'idRole', 'email']
+        })
+        res.status(200).json({
+            message: 'Successfully get info account',
+            data: info
+        })
+    } catch (e) {
+        console.error(e.message)
+        res.status(500).json({ message: e.message })
+    }
+}
+
 module.exports = {
     register,
     login,
-    updateStatus
+    updateStatus,
+    getAllUsers,
+    getInfo
 }

@@ -5,6 +5,6 @@ const verifyToken = require('../middleware/authMiddleware')
 const dataLabController = require('../controllers/dataLabController')
 
 router.put('/updateDataLab/:idLab', verifyToken, dataLabController.updateDataLab)
-router.get('/getDataLab/:idLab', verifyToken, dataLabController.getAllDataLab)
+router.get('/getDataLab/:idLab', dataLabController.getAllDataLab)
 
 module.exports = router

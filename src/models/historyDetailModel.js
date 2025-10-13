@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: sequelize.literal("CURRENT_TIMESTAMP")
         }
+    }, {
+        sequelize,
+        modelName: 'historyDetailModel',
+        tableName: 'historydetail-table'
     })
     return historyDetailModel
 }

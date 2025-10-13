@@ -9,7 +9,7 @@ module.exports = {
         const lab = ['LAB00001', 'LAB00002']
 
         for (const idLab of lab) {
-            for (let i = 1; i <= 12; i++) {
+            for (let i = 1; i <= 14; i++) {
                 const idDataLab = 'DL' + dataLabCounter.toString().padStart(5, '0')
                 const idBarang = 'BRNG' + i.toString().padStart(5, '0')
 

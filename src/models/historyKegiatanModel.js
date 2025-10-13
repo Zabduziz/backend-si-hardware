@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             this.belongsTo(models.userModel, {foreignKey: 'idUser'})
             this.belongsTo(models.tipePraktikumModel, {foreignKey: 'idPraktikum'})
-            this.belongsTo(model.ruangLabModel, {foreignKey: 'idLab'})
-            this.hasMany(model.historyDetailModel, {foreignKey: 'idHistory'})
+            this.belongsTo(models.ruangLabModel, {foreignKey: 'idLab'})
+            this.hasMany(models.historyDetailModel, {foreignKey: 'idHistory'})
         }
     }
     historyKegiatanModel.init({
@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             allowNull: false,
-            unique: true
+            unique: true,
+            primaryKey: true
         },
         idUser: {
             type: DataTypes.STRING,
@@ -80,6 +81,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: sequelize.literal("CURRENT_TIMESTAMP")
         }
+    }, {
+        sequelize,
+        modelName: 'historyKegiatanModel',
+        tableName: 'historykegiatan-table'
     })
     return historyKegiatanModel
 }

@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: sequelize.literal("CURRENT_TIMESTAMP")
         }
+    }, {
+        sequelize,
+        modelName: 'tipePraktikumModel',
+        tableName: 'tipepraktikum-table'
     })
     return tipePraktikumModel
 }

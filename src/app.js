@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const path = require('path')
 
 const app = express()
 const port = 3000
@@ -13,6 +14,7 @@ const praktikumRoutes = require('./routes/praktikumRoutes')
 
 app.use(cors())
 app.use(bodyParser.json())
+app.use(express.static(path.join(__dirname, '..', 'public')))
 
 app.get('/', (req, res) => {
     res.send('Hello World!')

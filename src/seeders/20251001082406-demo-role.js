@@ -81,38 +81,46 @@ module.exports = {
             },
             {
                 idBarang: 'BRNG00004',
-                namaBarang: 'Kabel SATA'
+                namaBarang: 'Ram'
             },
             {
                 idBarang: 'BRNG00005',
-                namaBarang: 'Harddisk'
+                namaBarang: 'Power Supply'
             },
             {
                 idBarang: 'BRNG00006',
-                namaBarang: 'Puzzle Mat'
+                namaBarang: 'Kabel SATA'
             },
             {
                 idBarang: 'BRNG00007',
-                namaBarang: 'Komputer'
+                namaBarang: 'Harddisk'
             },
             {
                 idBarang: 'BRNG00008',
-                namaBarang: 'Flashdisk'
+                namaBarang: 'Puzzle Mat'
             },
             {
                 idBarang: 'BRNG00009',
-                namaBarang: 'Crimping Tools'
+                namaBarang: 'Komputer'
             },
             {
                 idBarang: 'BRNG00010',
-                namaBarang: 'Lan Tester'
+                namaBarang: 'Flashdisk'
             },
             {
                 idBarang: 'BRNG00011',
-                namaBarang: 'Pengupas Kabel'
+                namaBarang: 'Crimping Tools'
             },
             {
                 idBarang: 'BRNG00012',
+                namaBarang: 'Lan Tester'
+            },
+            {
+                idBarang: 'BRNG00013',
+                namaBarang: 'Pengupas Kabel'
+            },
+            {
+                idBarang: 'BRNG00014',
                 namaBarang: 'Gunting'
             }
         ])
