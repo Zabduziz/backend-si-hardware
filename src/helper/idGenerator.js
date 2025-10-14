@@ -1,21 +1,20 @@
-const { userModel } = require('../models')
+const { userModel, barangModel, dataLabModel } = require('../models');
 
-// AUTOMATIC GENERATE USERID
-const generatorIdUser = async() => {
-    const lastUser = await userModel.findOne({
-        order: [['idUser', 'DESC']]
-    })
+const generateId = async (model, idField, prefix) => {
+    const lastRecord = await model.findOne({
+        order: [[idField, 'DESC']]
+    });
 
-    let nextIdNumber = 1
-    if (lastUser) {
-        const lastId = lastUser.idUser
-        const lastNumber = parseInt(lastId.replace('USR', ''), 10)
-        nextIdNumber = lastNumber + 1
+    let nextIdNumber = 1;
+    if (lastRecord) {
+        const lastId = lastRecord[idField];
+        const lastNumber = parseInt(lastId.replace(prefix, ''), 10);
+        nextIdNumber = lastNumber + 1;
     }
-    const formattedNumber = String(nextIdNumber).padStart(5, '0')
-    return `USR${formattedNumber}`
-}
+    const formattedNumber = String(nextIdNumber).padStart(5, '0');
+    return `${prefix}${formattedNumber}`;
+};
 
 module.exports = {
-    generatorIdUser
-}
+    generateId
+};
