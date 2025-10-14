@@ -1,4 +1,4 @@
-const { dataLabModel, historyKegiatanModel, historyDetailModel, sequelize } = require('../models')
+const { dataLabModel, historyKegiatanModel, historyDetailModel, barangModel, sequelize } = require('../models')
 const path = require('path')
 
 const addPraktikumData = async (req, res) => {
@@ -110,10 +110,37 @@ const getPraktikum = async (req, res) => {
 }
 
 const getDetailHistory = async (req, res) => {
-
+    const idHistory = req.params.idHistory
+    if (!idHistory) { return res.status(400).json({ message: "Please put idHistory!" }) }
+    try {
+        const allDetail = await historyDetailModel.findAll({
+            where: { idHistory: idHistory },
+            include: [
+                {
+                    model: dataLabModel,
+                    attributes: ['idDataLab'],
+                    include: [
+                        {
+                            model: barangModel,
+                            attributes: ['namaBarang']
+                        }
+                    ]
+                }
+            ],
+            attributes: ['idHistory', 'jumlahAwal', 'jumlahAkhir', 'jumlahRusak'],
+        })
+        res.status(200).json({
+            message: 'Histories successfully get!',
+            data: allDetail
+        })
+    } catch (e) {
+        console.error(e.message)
+        res.status(500).json({error: e.message})
+    }
 }
 
 module.exports = {
     addPraktikumData,
-    getPraktikum
+    getPraktikum,
+    getDetailHistory
 }

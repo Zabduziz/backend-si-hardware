@@ -25,6 +25,6 @@ router.post(
 )
 
 router.get('/getPraktikumHistory/:idPraktikum', praktikumController.getPraktikum)
-// router.get('/getDetailHistory/:idHistory', verifyToken, praktikumController)
+router.get('/getDetailHistory/:idHistory', praktikumController.getDetailHistory)
 
 module.exports = router
