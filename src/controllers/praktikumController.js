@@ -1,4 +1,4 @@
-const { dataLabModel, historyKegiatanModel, historyDetailModel, barangModel, sequelize } = require('../models')
+const { dataLabModel, historyKegiatanModel, historyDetailModel, barangModel, userModel, sequelize } = require('../models')
 const path = require('path')
 
 const addPraktikumData = async (req, res) => {
@@ -85,7 +85,11 @@ const getPraktikum = async (req, res) => {
     }
     try {
         const allHistories = await historyKegiatanModel.findAll({
-            where: { idPraktikum: idPraktikum }
+            where: { idPraktikum: idPraktikum },
+            include: [{
+                model: userModel,
+                attributes: ['nama']
+            }]
         })
         if (allHistories.length === 0) {
             return res.status(404).json({ message: "No histories found." })

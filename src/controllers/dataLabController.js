@@ -1,5 +1,6 @@
 const { dataLabModel, barangModel } = require('../models')
 const { Op } = require('sequelize')
+const { generateId } = require('../helper/idGenerator')
 
 const updateDataLab = async (req, res) => {
     const idLab = req.params.idLab
@@ -60,7 +61,38 @@ const getAllDataLab = async (req, res) => {
     }
 }
 
+const addDataLab = async (req, res) => {
+    const idRole = req.user.idRole
+    if (idRole !== 'ADM') { return res.status(403).json({ message: "You are not authorized!" }) }
+    const namaBarang = req.body.namaBarang
+    try {
+        const newBarang = await barangModel.create({
+            idBarang: await generateId(barangModel, 'idBarang', 'BRNG'),
+            namaBarang: namaBarang
+        })
+        const addBarang1 = await dataLabModel.create({
+            idDataLab: await generateId(dataLabModel, 'idDataLab', 'DL'),
+            idLab: 'LAB00001',
+            idBarang: newBarang.idBarang,
+            jumlahNormal: 0,
+            jumlahRusak: 0
+        })
+        const addBarang2 = await dataLabModel.create({
+            idDataLab: await generateId(dataLabModel, 'idDataLab', 'DL'),
+            idLab: 'LAB00002',
+            idBarang: newBarang.idBarang,
+            jumlahNormal: 0,
+            jumlahRusak: 0
+        })
+        res.status(200).json({ message: "Successfully add barang!" })
+    } catch (e) {
+        console.error(e.message)
+        res.status(500).json({ message: e.message })
+    }
+}
+
 module.exports = {
     updateDataLab,
     getAllDataLab,
+    addDataLab
 }

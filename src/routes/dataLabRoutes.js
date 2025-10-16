@@ -6,5 +6,6 @@ const dataLabController = require('../controllers/dataLabController')
 
 router.put('/updateDataLab/:idLab', verifyToken, dataLabController.updateDataLab)
 router.get('/getDataLab/:idLab', dataLabController.getAllDataLab)
+router.post('/addDataLab', verifyToken, dataLabController.addDataLab)
 
 module.exports = router
