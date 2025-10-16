@@ -2,7 +2,7 @@ const { userModel } = require('../models')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const sequelize = require('sequelize')
-const idGenerator = require('../helper/idGenerator')
+const { generateId } = require('../helper/idGenerator')
 
 const SECRET_KEY = "RAHASIA-SUPER-AMAN"
 
@@ -40,7 +40,7 @@ const register = async(req, res) => {
             return res.status(409).json({ message: "Email already exists! Please use another email!" })
         }
 
-        const newidUser = await idGenerator.generatorIdUser()
+        const newidUser = await generateId(userModel, 'idUser', 'USR')
         const user = await userModel.create({
             idUser: newidUser,
             idRole: 'AST',
