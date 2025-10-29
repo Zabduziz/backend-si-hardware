@@ -3,10 +3,12 @@ const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
     class historyKegiatanModel extends Model {
         static associate(models) {
-            this.belongsTo(models.userModel, {foreignKey: 'idUser'})
-            this.belongsTo(models.tipePraktikumModel, {foreignKey: 'idPraktikum'})
-            this.belongsTo(models.ruangLabModel, {foreignKey: 'idLab'})
-            this.hasMany(models.historyDetailModel, {foreignKey: 'idHistory'})
+            this.belongsTo(models.userModel, { foreignKey: 'idUser' })
+            this.belongsTo(models.tipePraktikumModel, { foreignKey: 'idPraktikum' })
+            this.belongsTo(models.ruangLabModel, { foreignKey: 'idLab' })
+            this.belongsTo(models.dosenModel, { foreignKey: 'idDosen' })
+            this.belongsTo(models.kelasModel, { foreignKey: 'idKelas' })
+            this.hasMany(models.historyDetailModel, { foreignKey: 'idHistory' })
         }
     }
     historyKegiatanModel.init({
@@ -47,6 +49,26 @@ module.exports = (sequelize, DataTypes) => {
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE'
         },
+        idDosen: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            references: {
+                model: 'dosen-table',
+                key: 'idDosen'
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE'
+        },
+        idKelas: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            references: {
+                model: 'kelas-table',
+                key: 'idKelas'
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE'
+        },
         tanggal: {
             type: DataTypes.DATEONLY,
             allowNull: false,
@@ -54,14 +76,6 @@ module.exports = (sequelize, DataTypes) => {
         waktu: {
             type: DataTypes.TIME,
             allowNull: false,
-        },
-        dosen: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        kelas: {
-            type: DataTypes.STRING,
-            allowNull: false
         },
         tindakLanjut: {
             type: DataTypes.STRING,
