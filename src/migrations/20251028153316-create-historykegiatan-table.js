@@ -8,7 +8,8 @@ module.exports = {
                 type: Sequelize.UUID,
                 defaultValue: Sequelize.UUIDV4,
                 allowNull: false,
-                unique: true
+                unique: true,
+                primaryKey: true
             },
             idUser: {
                 type: Sequelize.STRING,
@@ -40,6 +41,26 @@ module.exports = {
                 onDelete: 'CASCADE',
                 onUpdate: 'CASCADE'
             },
+            idDosen: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                references: {
+                    model: 'dosen-table',
+                    key: 'idDosen'
+                },
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE'
+            },
+            idKelas: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                references: {
+                    model: 'kelas-table',
+                    key: 'idKelas'
+                },
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE'
+            },
             tanggal: {
                 type: Sequelize.DATEONLY,
                 allowNull: false,
@@ -47,14 +68,6 @@ module.exports = {
             waktu: {
                 type: Sequelize.TIME,
                 allowNull: false,
-            },
-            dosen: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            kelas: {
-                type: Sequelize.STRING,
-                allowNull: false
             },
             tindakLanjut: {
                 type: Sequelize.STRING,
