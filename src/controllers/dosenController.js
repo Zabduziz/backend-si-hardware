@@ -1,4 +1,4 @@
-const { dosenModel, kelasModel, kelasDosenModel } = require('../models')
+const { dosenModel } = require('../models')
 const { generateId } = require('../helper/idGenerator')
 
 const addDosen = async (req, res) => {
