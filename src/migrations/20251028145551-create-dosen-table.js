@@ -2,32 +2,33 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('dosen-table', {
-      idDosen: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-        primaryKey: true
-      },
-      namaDosen: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      createdAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
-      },
-      updatedAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
-      }
-    })
-  },
+    async up(queryInterface, Sequelize) {
+        await queryInterface.createTable('dosen-table', {
+            idDosen: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                unique: true,
+                primaryKey: true
+            },
+            namaDosen: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                unique: true,
+            },
+            createdAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
+            },
+            updatedAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
+            }
+        })
+    },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('dosen-table')
-  }
+    async down(queryInterface, Sequelize) {
+        await queryInterface.dropTable('dosen-table')
+    }
 };
