@@ -5,9 +5,9 @@ const addPraktikumData = async (req, res) => {
     const idUser = req.user.idUser
     const file = req.file
     const { idPraktikum, idLab } = req.params
-    const { tanggal, dosen, tindakLanjut, waktu, kelas} = req.body
+    const { tanggal, idDosen, tindakLanjut, waktu, idKelas } = req.body
     const photoPraktikum = file ? `uploads/${file.filename}` : null
-    if (!idPraktikum || !idLab || !tanggal || !dosen) {
+    if (!idPraktikum || !idLab || !tanggal || !idDosen) {
         return res.status(400).send('Please put the valid parameter')
     }
     let detailAlat = req.body.dataAlat
@@ -28,18 +28,18 @@ const addPraktikumData = async (req, res) => {
             idUser: idUser,
             idPraktikum: idPraktikum,
             idLab: idLab,
+            idDosen: idDosen,
+            idKelas: idKelas,
             tanggal: tanggal,
             waktu: waktu,
-            dosen: dosen,
-            kelas: kelas,
             tindakLanjut: tindakLanjut,
             ttd: photoPraktikum
-        }, {transaction: t})
+        }, { transaction: t })
 
         const alatList = []
         for (const detail of detailAlat) {
             const dataLab = await dataLabModel.findOne({
-                where: { idBarang: detail.idBarang, idLab: idLab}
+                where: { idBarang: detail.idBarang, idLab: idLab }
             })
             const jumlahAwal = dataLab.jumlahNormal
             const jumlahRusak = jumlahAwal - detail.jumlahAkhir
@@ -49,7 +49,7 @@ const addPraktikumData = async (req, res) => {
                 jumlahAwal: jumlahAwal,
                 jumlahAkhir: detail.jumlahAkhir,
                 jumlahRusak: jumlahRusak,
-            }, {transaction: t})
+            }, { transaction: t })
             await dataLabModel.update(
                 {
                     jumlahNormal: dataLab.jumlahNormal - jumlahRusak,
@@ -61,12 +61,12 @@ const addPraktikumData = async (req, res) => {
                         idLab: idLab,
                     }
                 },
-                {transaction: t}
+                { transaction: t }
             )
             alatList.push(historyDetail)
         }
         await t.commit()
-        
+
         res.status(200).json({
             message: 'Successfully added history',
             history: historyKegiatan,
@@ -74,7 +74,7 @@ const addPraktikumData = async (req, res) => {
         })
     } catch (e) {
         console.error(e.message)
-        res.status(500).json({error: e.message})
+        res.status(500).json({ error: e.message })
     }
 }
 
@@ -109,7 +109,7 @@ const getPraktikum = async (req, res) => {
         })
     } catch (e) {
         console.error(e.message)
-        res.status(500).json({error: e.message})
+        res.status(500).json({ error: e.message })
     }
 }
 
@@ -139,7 +139,7 @@ const getDetailHistory = async (req, res) => {
         })
     } catch (e) {
         console.error(e.message)
-        res.status(500).json({error: e.message})
+        res.status(500).json({ error: e.message })
     }
 }
 
