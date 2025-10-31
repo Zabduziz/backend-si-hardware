@@ -13,6 +13,7 @@ const dataLabRoutes = require('./routes/dataLabRoutes')
 const praktikumRoutes = require('./routes/praktikumRoutes')
 const dosenRoutes = require('./routes/dosenRoutes')
 const kelasRoutes = require('./routes/kelasRoutes')
+const kelasDosenRoutes = require('./routes/kelasDosenRoutes')
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -39,6 +40,9 @@ app.use('/dosen', dosenRoutes)
 
 // KELAS
 app.use('/kelas', kelasRoutes)
+
+// DOSEN & KELAS
+app.use('/dosenKelas',kelasDosenRoutes)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
