@@ -22,7 +22,7 @@ module.exports = {
                 idRole: 'ADM',
                 nama: 'Administrator',
                 email: 'admin@gmail.com',
-                nim: '111111111',
+                nim: '12345678',
                 password: hashedPassword,
                 isActive: true
             }, {
@@ -30,7 +30,7 @@ module.exports = {
                 idRole: 'AST',
                 nama: 'Assistant',
                 email: 'asisten@gmail.com',
-                nim: '222222222',
+                nim: '87654321',
                 password: hashedPassword,
                 isActive: true
             }
