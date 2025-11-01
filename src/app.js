@@ -15,6 +15,7 @@ const dosenRoutes = require('./routes/dosenRoutes')
 const kelasRoutes = require('./routes/kelasRoutes')
 const kelasDosenRoutes = require('./routes/kelasDosenRoutes')
 const barangRoutes = require('./routes/barangRoutes')
+const ruangLabRoutes = require('./routes/ruangLabRoutes')
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -32,6 +33,9 @@ app.use('/role', roleRoutes)
 
 // BARANG
 app.use('/barang', barangRoutes)
+
+// LAB
+app.use('/ruangLab', ruangLabRoutes)
 
 // DATALAB
 app.use('/datalab', dataLabRoutes)
