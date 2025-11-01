@@ -1,6 +1,6 @@
 const { kelasDosenModel, kelasModel, dosenModel } = require('../models')
 
-const addKelasDosen = async (req, res) => { //TODO: Bisa duplikat hati-hati
+const addKelasDosen = async (req, res) => {
     const idRole = req.user.idRole
     if (idRole !== 'ADM') {
         return res.status(403).json({ message: "You are not authorized!" })
@@ -8,6 +8,18 @@ const addKelasDosen = async (req, res) => { //TODO: Bisa duplikat hati-hati
     const { idDosen, idKelas, tahunAjar, semester } = req.body
     if (!idDosen || !idKelas || !tahunAjar || !semester) { return res.status(400).json({ message: "Please input id kelas and dosen!" }) }
     try {
+        const existingKelasDosen = await kelasDosenModel.findOne({
+            where: {
+                idKelas: idKelas,
+                tahunAjar: tahunAjar,
+                semester: semester
+            }
+        })
+
+        if (existingKelasDosen) {
+            return res.status(409).json({ message: "Kelas sudah diambil oleh dosen untuk semester ini!" })
+        }
+
         const tahunSelesai = tahunAjar + 1
         const newKelasDosen = await kelasDosenModel.create({
             idDosen: idDosen,
