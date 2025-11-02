@@ -30,6 +30,12 @@ const register = async(req, res) => {
 
     if (!nama) { return res.status(400).json({message:"Please input your name!"}) }
     if (!nim) { return res.status(400).json({message:"Please input your NIM!"}) }
+    if (isNaN(nim)) {
+        return res.status(400).json({ message: "NIM must be a number!" });
+    }
+    if (nim.length !== 8) {
+        return res.status(400).json({ message: "NIM must be exactly 8 characters long!" });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10)
     try {
@@ -61,6 +67,12 @@ const register = async(req, res) => {
 const login = async(req, res) => {
     const { nim, password } = req.body
     if (!nim || !password) { return res.status(400).json({ message: "Please insert value in the field!" }) }
+    if (isNaN(nim)) {
+        return res.status(400).json({ message: "NIM must be a number!" });
+    }
+    if (nim.length !== 8) {
+        return res.status(400).json({ message: "NIM must be exactly 8 characters long!" });
+    }
     try {
         const user = await userModel.findOne({
             where: { nim: nim }
