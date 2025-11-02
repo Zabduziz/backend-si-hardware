@@ -64,27 +64,28 @@ const getAllDataLab = async (req, res) => {
 const addDataLab = async (req, res) => {
     const idRole = req.user.idRole
     if (idRole !== 'ADM') { return res.status(403).json({ message: "You are not authorized!" }) }
-    const namaBarang = req.body.namaBarang
+    const { idBarang, idLab } = req.body
+    if (!idBarang || !idLab) {
+        return res.status(400).json({ message: "Please insert idLab and namaBarang in the field!" })
+    }
     try {
-        const newBarang = await barangModel.create({
-            idBarang: await generateId(barangModel, 'idBarang', 'BRNG'),
-            namaBarang: namaBarang
+        const existedBarangInLab = await dataLabModel.findOne({
+            where: {
+                idLab: idLab,
+                idBarang: idBarang
+            }
         })
-        const addBarang1 = await dataLabModel.create({
+        if (existedBarangInLab) {
+            return res.status(409).json({message:`Barang ${idBarang} in ${idLab} sudah ada!`})
+        }
+        const newBarangtoLab = await dataLabModel.create({
             idDataLab: await generateId(dataLabModel, 'idDataLab', 'DL'),
-            idLab: 'LAB00001',
-            idBarang: newBarang.idBarang,
+            idLab: idLab,
+            idBarang: idBarang,
             jumlahNormal: 0,
             jumlahRusak: 0
         })
-        const addBarang2 = await dataLabModel.create({
-            idDataLab: await generateId(dataLabModel, 'idDataLab', 'DL'),
-            idLab: 'LAB00002',
-            idBarang: newBarang.idBarang,
-            jumlahNormal: 0,
-            jumlahRusak: 0
-        })
-        res.status(200).json({ message: "Successfully add barang!" })
+        res.status(200).json({ message: `Succsessfully add ${idBarang} to ${idLab}!`, data: newBarangtoLab })
     } catch (e) {
         console.error(e.message)
         res.status(500).json({ message: e.message })

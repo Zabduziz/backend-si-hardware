@@ -13,6 +13,9 @@ const dataLabRoutes = require('./routes/dataLabRoutes')
 const praktikumRoutes = require('./routes/praktikumRoutes')
 const dosenRoutes = require('./routes/dosenRoutes')
 const kelasRoutes = require('./routes/kelasRoutes')
+const kelasDosenRoutes = require('./routes/kelasDosenRoutes')
+const barangRoutes = require('./routes/barangRoutes')
+const ruangLabRoutes = require('./routes/ruangLabRoutes')
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -28,6 +31,12 @@ app.use('/auth', userRoutes)
 // ROLE
 app.use('/role', roleRoutes)
 
+// BARANG
+app.use('/barang', barangRoutes)
+
+// LAB
+app.use('/ruangLab', ruangLabRoutes)
+
 // DATALAB
 app.use('/datalab', dataLabRoutes)
 
@@ -39,6 +48,9 @@ app.use('/dosen', dosenRoutes)
 
 // KELAS
 app.use('/kelas', kelasRoutes)
+
+// DOSEN & KELAS
+app.use('/dosenKelas',kelasDosenRoutes)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
