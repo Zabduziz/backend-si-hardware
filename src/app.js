@@ -50,7 +50,7 @@ app.use('/dosen', dosenRoutes)
 app.use('/kelas', kelasRoutes)
 
 // DOSEN & KELAS
-app.use('/dosenKelas',kelasDosenRoutes)
+app.use('/dosenKelas', kelasDosenRoutes)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
