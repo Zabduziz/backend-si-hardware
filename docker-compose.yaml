@@ -1,0 +1,70 @@
+version: '3.8'
+
+# Definisi Volumes untuk persistensi data
+volumes:
+  postgres_data:
+  uploads_data:
+
+
+services:
+  # --- 1. Database Service (PostgreSQL) ---
+  db:
+    image: postgres:14.19-alpine3.21
+    container_name: postgres_db
+    restart: always
+    # Ambil environment variables dari file .env di root project
+    environment:
+      - POSTGRES_USER=myhardware
+      - POSTGRES_PASSWORD=hardwarepass
+      - POSTGRES_DB=db_hardware
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # Healthcheck biar service lain nunggu DB beneran siap
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$DB_USERNAME -d $$DB_DATABASE_DEVELOPMENT" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+    # --- 3. Backend Service (Node.js App) ---
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: node_backend
+    restart: always
+    # Nunggu migrasi selesai dan sukses
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      # Mount volume untuk menyimpan file upload (ttd)
+      - uploads_data:/usr/src/app/public/uploads
+    networks:
+      - app-network
+    # Di dalam network, service ini berjalan di port 3000 (sesuai app.js)
+
+    # --- 4. Reverse Proxy Service (Nginx) ---
+  nginx:
+    image: nginx:latest
+    container_name: nginx_proxy
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      # Map port 80 di VPS ke port 80 di container Nginx
+      - "80:80"
+    volumes:
+      # Masukkan konfigurasi Nginx kita
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # Juga mount volume uploads. Walaupun Node.js yang serve, Nginx butuh akses kalau ada kasus lain.
+      - uploads_data:/usr/src/app/public/uploads:ro
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
