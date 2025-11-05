@@ -48,20 +48,19 @@ services:
     # Di dalam network, service ini berjalan di port 3000 (sesuai app.js)
 
     # --- 4. Reverse Proxy Service (Nginx) ---
-  nginx:
-    image: nginx:latest
-    container_name: nginx_proxy
+  caddy:
+    image: caddy:latest
+    container_name: caddy_proxy
     restart: always
     depends_on:
       - backend
     ports:
       # Map port 80 di VPS ke port 80 di container Nginx
       - "80:80"
+      - "443:443"
     volumes:
       # Masukkan konfigurasi Nginx kita
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      # Juga mount volume uploads. Walaupun Node.js yang serve, Nginx butuh akses kalau ada kasus lain.
-      - uploads_data:/usr/src/app/public/uploads:ro
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
     networks:
       - app-network
 
