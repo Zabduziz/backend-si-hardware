@@ -1,5 +1,6 @@
+require('dotenv').config()
 const jwt = require("jsonwebtoken")
-const SECRET_KEY = "RAHASIA-SUPER-AMAN"
+const SECRET_KEY = process.env.SECRET_KEY_TOKEN
 
 const verifyToken = (req, res, next) => {
     const bearerHeader = req.headers['authorization']
