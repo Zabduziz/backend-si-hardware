@@ -18,7 +18,7 @@ const getAllBarang = async (req, res) => {
 
 const addBarang = async (req, res) => {
     const idRole = req.user.idRole
-    const namaBarang = req.body.namaBarang
+    const { namaBarang, deskripsi } = req.body
     if (idRole !== 'ADM') {
         res.status(403).json({ message:"You are not authorized to addBarang!" })
     }
@@ -36,7 +36,8 @@ const addBarang = async (req, res) => {
         }
         const newBarang = await barangModel.create({
             idBarang: await generateId(barangModel, 'idBarang', 'BRNG'),
-            namaBarang: namaBarang
+            namaBarang: namaBarang,
+            deskripsiBarang: deskripsi
         })
         res.status(200).json({
             message: "Successfully created barang!",

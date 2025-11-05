@@ -1,10 +1,11 @@
+require('dotenv').config()
 const { userModel } = require('../models')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const sequelize = require('sequelize')
 const { generateId } = require('../helper/idGenerator')
 
-const SECRET_KEY = "RAHASIA-SUPER-AMAN"
+const SECRET_KEY = process.env.SECRET_KEY_TOKEN
 
 // REGISTER
 const register = async(req, res) => {

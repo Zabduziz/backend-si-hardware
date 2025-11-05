@@ -77,8 +77,14 @@ const getAllKelasDosen = async (req, res) => {
 
 const getKelas = async (req, res) => {
     const namaDosen = req.query.namaDosen
+    const tahunAjar = req.query.tahunAjar
+    const semester = req.query.semester
     if (!namaDosen) {
         return res.status(400).json({ message: "Please input nama dosen!" })
+    }if (!tahunAjar) {
+        return res.status(400).json({ message: "Please input Tahun Ajar!" })
+    }if (!semester) {
+        return res.status(400).json({ message: "Please input Semester!" })
     }
     try {
         const dosen = await dosenModel.findOne({
@@ -89,7 +95,11 @@ const getKelas = async (req, res) => {
             return res.status(404).json({ message: "Dosen not found!" })
         }
         const kelasDosen = await kelasDosenModel.findAll({
-            where: { idDosen: dosen.idDosen },
+            where: {
+                idDosen: dosen.idDosen,
+                tahunAjar: tahunAjar,
+                semester: semester
+            },
             include: [{
                 model: kelasModel,
                 attributes: ['idKelas', 'namaKelas']

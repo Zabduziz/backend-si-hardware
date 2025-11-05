@@ -45,8 +45,6 @@ const deleteDosen = async (req, res) => {
 }
 
 const getAllDosen = async (req, res) => {
-    const idRole = req.user.idRole
-    if (idRole !== 'ADM') { return res.status(403).json({ message: "You are not authorized" }) }
     try {
         const allDosen = await dosenModel.findAll()
         res.status(200).json({

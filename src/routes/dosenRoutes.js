@@ -4,7 +4,7 @@ const verifyToken = require('../middleware/authMiddleware')
 
 const dosenController = require('../controllers/dosenController')
 
-router.get('/', verifyToken, dosenController.getAllDosen)
+router.get('/', dosenController.getAllDosen)
 router.post('/addDosen', verifyToken, dosenController.addDosen)
 router.delete('/deleteDosen/:idDosen', verifyToken, dosenController.deleteDosen)
 

@@ -18,6 +18,11 @@ module.exports = (sequelize, DataTypes) => {
             unique: true,
             allowNull: false,
         },
+        deskripsiBarang: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: "no description",
+        },
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,

@@ -15,6 +15,11 @@ module.exports = {
                 unique: true,
                 allowNull: false,
             },
+            deskripsiBarang: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                defaultValue: "no description",
+            },
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
