@@ -1,4 +1,3 @@
-require('dotenv').config()
 const { userModel } = require('../models')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -8,7 +7,7 @@ const { generateId } = require('../helper/idGenerator')
 const SECRET_KEY = process.env.SECRET_KEY_TOKEN
 
 // REGISTER
-const register = async(req, res) => {
+const register = async (req, res) => {
     const { email, nama, nim, password } = req.body
     if (!password) { return res.status(400).send({ error: 'Password is required' }) }
     if (password.length < 8) {
@@ -23,14 +22,14 @@ const register = async(req, res) => {
         return res.status(400).json({ message: "Password must at least 1 Capital character!" })
     }
 
-    if (!email) { return res.status(400).json({message:"Please input the Email!"}) }
+    if (!email) { return res.status(400).json({ message: "Please input the Email!" }) }
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     if (!emailRegex.test(email)) {
         return res.status(400).json({ message: "Email format is not valid!" })
     }
 
-    if (!nama) { return res.status(400).json({message:"Please input your name!"}) }
-    if (!nim) { return res.status(400).json({message:"Please input your NIM!"}) }
+    if (!nama) { return res.status(400).json({ message: "Please input your name!" }) }
+    if (!nim) { return res.status(400).json({ message: "Please input your NIM!" }) }
     if (isNaN(nim)) {
         return res.status(400).json({ message: "NIM must be a number!" });
     }
@@ -41,7 +40,7 @@ const register = async(req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10)
     try {
         const existingUser = await userModel.findOne({
-            where: { email: email}
+            where: { email: email }
         })
         if (existingUser) {
             return res.status(409).json({ message: "Email already exists! Please use another email!" })
@@ -57,7 +56,7 @@ const register = async(req, res) => {
             password: hashedPassword
         })
 
-        res.status(201).json({message: "User created successfully.", data: user})
+        res.status(201).json({ message: "User created successfully.", data: user })
     } catch (e) {
         console.error(e)
         res.status(500).json({ message: e.message })
@@ -65,7 +64,7 @@ const register = async(req, res) => {
 }
 
 // LOGIN
-const login = async(req, res) => {
+const login = async (req, res) => {
     const { nim, password } = req.body
     if (!nim || !password) { return res.status(400).json({ message: "Please insert value in the field!" }) }
     if (isNaN(nim)) {
@@ -91,8 +90,8 @@ const login = async(req, res) => {
             nama: user.nama
         }
 
-        const token = jwt.sign(payload, SECRET_KEY, {expiresIn: '2h'})
-        res.status(200).json({ message:"Login Successfully!", token: token})
+        const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '2h' })
+        res.status(200).json({ message: "Login Successfully!", token: token })
     } catch (e) {
         console.error(e.message)
         res.status(500).json({ message: e.message })
@@ -121,7 +120,7 @@ const updateStatus = async (req, res) => {
     }
 }
 
-const getAllUsers = async(req, res) => {
+const getAllUsers = async (req, res) => {
     const role = req.user.idRole
     if (role !== 'ADM') { return res.status(403).json({ message: "You are not Admin!" }) }
     try {
@@ -138,7 +137,7 @@ const getAllUsers = async(req, res) => {
     }
 }
 
-const getInfo = async(req, res) => {
+const getInfo = async (req, res) => {
     const idUser = req.user.idUser
     try {
         const info = await userModel.findOne({
