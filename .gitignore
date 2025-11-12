@@ -73,7 +73,7 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-src/.env
+.env
 .env.development.local
 .env.test.local
 .env.production.local
@@ -137,11 +137,22 @@ dist
 
 .idea/
 
-# Public File
-public/uploads
-
 # VSCodium Extension
 .vscode
 
 # Webstorm IDE
 .idea
+
+# Semua jenis gambar
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.svg
+*.webp
+*.ico
+
+# File data
+*.csv
