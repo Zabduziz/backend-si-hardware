@@ -1,23 +1,32 @@
+require('dotenv').config({
+    path: "../.env"
+})
 module.exports = {
     "development": {
         "username": process.env.DB_USERNAME,
         "password": process.env.DB_PASSWORD,
         "database": process.env.DB_DATABASE_DEVELOPMENT,
         "host": process.env.DB_HOST,
-        "dialect": process.env.DB_DIALECT
+        "dialect": process.env.DB_DIALECT,
+        "port": process.env.DB_PORT,
+        "logging": false
     },
     "test": {
         "username": process.env.DB_USERNAME,
         "password": process.env.DB_PASSWORD,
         "database": process.env.DB_DATABASE_TEST,
         "host": process.env.DB_HOST,
-        "dialect": process.env.DB_DIALECT
+        "dialect": process.env.DB_DIALECT,
+        "port": process.env.DB_PORT,
+        "logging": false
     },
     "production": {
         "username": process.env.DB_USERNAME,
         "password": process.env.DB_PASSWORD,
         "database": process.env.DB_DATABASE_PRODUCTION,
         "host": process.env.DB_HOST,
-        "dialect": process.env.DB_DIALECT
+        "dialect": process.env.DB_DIALECT,
+        "port": process.env.DB_PORT,
+        "logging": false
     }
 }
