@@ -156,3 +156,5 @@ dist
 
 # File data
 *.csv
+
+bun.lock
