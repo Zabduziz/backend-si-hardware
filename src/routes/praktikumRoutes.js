@@ -17,6 +17,7 @@ const upload = multer({ storage: storage })
 
 const praktikumController = require('../controllers/praktikumController')
 
+router.post('/addTipePraktikum', verifyToken, praktikumController.addTipePraktikum)
 router.post(
     '/addPraktikum/:idLab/:idPraktikum',
     upload.single('photoPraktikum'),

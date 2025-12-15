@@ -1,4 +1,5 @@
-const { dataLabModel, historyKegiatanModel, historyDetailModel, barangModel, userModel, dosenModel, kelasModel, sequelize } = require('../models')
+const { dataLabModel, historyKegiatanModel, historyDetailModel, barangModel, userModel, dosenModel, kelasModel, sequelize, tipePraktikumModel } = require('../models')
+const { generateId } = require('../helper/idGenerator')
 const path = require('path')
 
 const addPraktikumData = async (req, res) => {
@@ -152,8 +153,35 @@ const getDetailHistory = async (req, res) => {
     }
 }
 
+const addTipePraktikum = async(req, res) => {
+    const idRole = req.user.idRole
+    const namaPraktikum = req.body.namaPraktikum
+    if (idRole !== "ADM") {
+        return res.status(403).json({ message: "You are not authorized" })
+    }
+    try {
+        if(!namaPraktikum) {return res.status(400).json({ message: "Please input praktikum name!" })}
+        const checkPraktikumName = await tipePraktikumModel.findOne({
+            where: { namaPraktikum: namaPraktikum }
+        })
+        if (checkPraktikumName) {return res.status(400).json({ message: "Praktikum name already exists" })}
+        const newPraktikum = await tipePraktikumModel.create({
+            idPraktikum: await generateId(tipePraktikumModel, 'idPraktikum', 'PRTK'),
+            namaPraktikum: namaPraktikum
+        })
+        res.status(200).json({
+            message: "Successfully created praktikum! ",
+            data: newPraktikum
+        })
+    } catch (e) {
+        console.error(e.message)
+        res.status(500).json({ message: e.message })
+    }
+}
+
 module.exports = {
     addPraktikumData,
     getPraktikum,
-    getDetailHistory
+    getDetailHistory,
+    addTipePraktikum
 }
