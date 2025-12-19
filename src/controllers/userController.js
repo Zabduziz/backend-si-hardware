@@ -23,21 +23,23 @@ const register = async (req, res) => {
     }
 
     if (!email) { return res.status(400).json({ message: "Please input the Email!" }) }
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@mahasiswa\.unikom\.ac\.id$/;
     if (!emailRegex.test(email)) {
-        return res.status(400).json({ message: "Email format is not valid!" })
+        return res.status(400).json({ message: "Please use your UNIKOM email!" })
     }
 
     if (!nama) { return res.status(400).json({ message: "Please input your name!" }) }
-    if (!nim) { return res.status(400).json({ message: "Please input your NIM!" }) }
-    if (isNaN(nim)) {
-        return res.status(400).json({ message: "NIM must be a number!" });
-    }
-    if (nim.length !== 8) {
-        return res.status(400).json({ message: "NIM must be exactly 8 characters long!" });
+    const nameRegex = /^[A-Za-z ]{1,30}$/
+    if (!nameRegex.test(nama)) {
+        return res.status(400).json({ message: "Name must be letters only and max 30 characters" })
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    if (!nim) { return res.status(400).json({ message: "Please input your NIM!" }) }
+    const nimRegex = /^\d{8}$/
+    if (!nimRegex.test(nim)) {
+        return res.status(400).json({ message: "NIM must be 8 digits!" })
+    }
+
     try {
         const existingUser = await userModel.findOne({
             where: { email: email }
@@ -45,6 +47,14 @@ const register = async (req, res) => {
         if (existingUser) {
             return res.status(409).json({ message: "Email already exists! Please use another email!" })
         }
+        const existingNim = await userModel.findOne({
+            where: { nim: nim }
+        })
+        if (existingNim) {
+            return res.status(409).json({ message: "NIM already exists! Please use another NIM!" })
+        }
+        
+        const hashedPassword = await bcrypt.hash(password, 10)
 
         const newidUser = await generateId(userModel, 'idUser', 'USR')
         const user = await userModel.create({
@@ -67,11 +77,9 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { nim, password } = req.body
     if (!nim || !password) { return res.status(400).json({ message: "Please insert value in the field!" }) }
-    if (isNaN(nim)) {
-        return res.status(400).json({ message: "NIM must be a number!" });
-    }
-    if (nim.length !== 8) {
-        return res.status(400).json({ message: "NIM must be exactly 8 characters long!" });
+    const nimRegex = /^\d{8}$/;
+    if (!nimRegex.test(nim)) {
+        return res.status(400).json({ message: "NIM must be 8 digits!" });
     }
     try {
         const user = await userModel.findOne({
