@@ -1,3 +1,4 @@
+const helmet = require('helmet')
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -23,6 +24,7 @@ const ruangLabRoutes = require('./routes/ruangLabRoutes')
 app.use(cors())
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, '..', 'public')))
+app.use(helmet())
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
@@ -54,6 +56,15 @@ app.use('/kelas', kelasRoutes)
 
 // DOSEN & KELAS
 app.use('/dosenKelas', kelasDosenRoutes)
+
+// HEALTH CHECK
+app.get('/health', async (req, res) => {
+    res.json({
+        status: "OK",
+        timestamp: Date.now(),
+        uptime: process.uptime()
+    })
+})
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
