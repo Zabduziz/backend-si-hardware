@@ -28,4 +28,6 @@ router.post(
 router.get('/getPraktikumHistory/:idPraktikum', praktikumController.getPraktikum)
 router.get('/getDetailHistory/:idHistory', praktikumController.getDetailHistory)
 
+router.get('/viewPraktikum', praktikumController.viewPraktikumByDate)
+
 module.exports = router

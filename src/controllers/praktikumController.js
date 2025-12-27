@@ -1,6 +1,7 @@
 const { dataLabModel, historyKegiatanModel, historyDetailModel, barangModel, userModel, dosenModel, kelasModel, sequelize, tipePraktikumModel } = require('../models')
 const { generateId } = require('../helper/idGenerator')
 const path = require('path')
+const { Op } = require('sequelize')
 
 const addPraktikumData = async (req, res) => {
     const idUser = req.user.idUser
@@ -179,9 +180,53 @@ const addTipePraktikum = async(req, res) => {
     }
 }
 
+const viewPraktikumByDate = async(req, res) => {
+    const { idPraktikum, tanggalMulai, tanggalAkhir } = req.query
+    try {
+        let resultPraktikum
+        if (!idPraktikum) {
+            const allPraktikum = await historyKegiatanModel.findAll({
+                where: {
+                    tanggal: {
+                        [Op.between]: [
+                            new Date(tanggalMulai),
+                            new Date(tanggalAkhir)
+                        ]
+                    }
+                }
+            })
+            resultPraktikum = allPraktikum
+        } else {
+            const allPraktikum = await historyKegiatanModel.findAll({
+                where: {
+                    idPraktikum: idPraktikum,
+                    tanggal: {
+                        [Op.between]: [
+                            new Date(tanggalMulai),
+                            new Date(tanggalAkhir)
+                        ]
+                    }
+                }
+            })
+            resultPraktikum = allPraktikum
+        }
+        if (resultPraktikum.length === 0) {
+            return res.status(404).json({ message: "No praktikum found." })
+        }
+        res.status(200).json({
+            message: "Successfully get all praktikum by date!",
+            data: resultPraktikum
+        })
+    } catch (e) {
+        console.error(e.message)
+        res.status(500).json({ message: e.message })
+    }
+}
+
 module.exports = {
     addPraktikumData,
     getPraktikum,
     getDetailHistory,
-    addTipePraktikum
+    addTipePraktikum,
+    viewPraktikumByDate
 }
