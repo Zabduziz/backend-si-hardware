@@ -45,6 +45,15 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        isResolved: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: true
+        },
+        catatan: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
