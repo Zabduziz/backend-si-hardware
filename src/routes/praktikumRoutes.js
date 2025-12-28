@@ -29,5 +29,6 @@ router.get('/getPraktikumHistory/:idPraktikum', praktikumController.getPraktikum
 router.get('/getDetailHistory/:idHistory', praktikumController.getDetailHistory)
 
 router.get('/viewPraktikum', praktikumController.viewPraktikumByDate)
+router.get('/viewProblem', praktikumController.viewProblem)
 
 module.exports = router

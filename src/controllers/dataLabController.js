@@ -17,6 +17,7 @@ const updateDataLab = async (req, res) => {
             const { idBarang, jumlahNormal, jumlahRusak } = item
 
             if (!idBarang) { throw new Error('idBarang tidak boleh kosong')}
+            if (jumlahRusak > jumlahNormal) { throw new Error('jumlahRusak tidak boleh lebih besar dari jumlahNormal')}
 
             const [affectedRows] = await dataLabModel.update(
                 {
