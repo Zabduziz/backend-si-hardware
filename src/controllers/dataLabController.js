@@ -1,4 +1,4 @@
-const { dataLabModel, barangModel } = require('../models')
+const { dataLabModel, barangModel, Sequelize } = require('../models')
 const { Op } = require('sequelize')
 const { generateId } = require('../helper/idGenerator')
 
@@ -48,7 +48,12 @@ const getAllDataLab = async (req, res) => {
     try {
         const listAllDataLab = await dataLabModel.findAll({
             where: {idLab: idLab},
-            attributes: ['idBarang','jumlahNormal', 'jumlahRusak'],
+            attributes: [
+                'idBarang',
+                'jumlahNormal', 
+                'jumlahRusak',
+                [Sequelize.literal('"jumlahNormal" - "jumlahRusak"'), 'jumlah']
+            ],
             include: [{
                 model: barangModel,
                 attributes: ['namaBarang']

@@ -3,6 +3,13 @@ const { generateId } = require('../helper/idGenerator')
 const path = require('path')
 const { Op } = require('sequelize')
 
+const validatePositiveNumber = (val) => {
+    if (typeof val !== "number" || isNaN(val) || val < 0) {
+        return false;
+    }
+    return true;
+};
+
 const addPraktikumData = async (req, res) => {
     const idUser = req.user.idUser
     const file = req.file
@@ -40,19 +47,28 @@ const addPraktikumData = async (req, res) => {
 
         const alatList = []
         for (const detail of detailAlat) {
-            const dataLab = await dataLabModel.findOne({
-                where: { idBarang: detail.idBarang, idLab: idLab }
-            })
-            const jumlahAwal = dataLab.jumlahNormal
-            if (detail.jumlahAkhir > jumlahAwal) {
-                return res.status(400).json({ message: `Jumlah akhir ${detail.jumlahAkhir} tidak boleh lebih besar dari jumlah awal ${jumlahAwal}` })
+            if (!validatePositiveNumber(detail.jumlahAkhir)) {
+                return res.status(400).json({ message: "Input harus berupa angka positif!"})
             }
-            const jumlahRusak = jumlahAwal - detail.jumlahAkhir
+            const dataLab = await dataLabModel.findOne({
+                where: { idBarang: detail.idBarang, idLab: idLab },
+                attributes: [
+                    'idDataLab',
+                    'jumlahNormal',
+                    'jumlahRusak',
+                    [sequelize.literal('"jumlahNormal" - "jumlahRusak"'), 'jumlahTersedia']
+                ]
+            })
+            const jumlahTersedia = parseInt(dataLab.get('jumlahTersedia'))
+            if (detail.jumlahAkhir > jumlahTersedia) {
+                return res.status(400).json({ message: `Jumlah akhir ${detail.jumlahAkhir} tidak boleh lebih besar dari jumlah awal ${jumlahTersedia}` })
+            }
+            const jumlahRusak = jumlahTersedia - detail.jumlahAkhir
             const isResolved = (jumlahRusak > 0) ? false : true
             const historyDetail = await historyDetailModel.create({
                 idHistory: historyKegiatan.idHistory,
                 idDataLab: dataLab.idDataLab,
-                jumlahAwal: jumlahAwal,
+                jumlahAwal: jumlahTersedia,
                 jumlahAkhir: detail.jumlahAkhir,
                 jumlahRusak: jumlahRusak,
                 isResolved: isResolved,
@@ -60,7 +76,6 @@ const addPraktikumData = async (req, res) => {
             }, { transaction: t })
             await dataLabModel.update(
                 {
-                    jumlahNormal: dataLab.jumlahNormal - jumlahRusak,
                     jumlahRusak: dataLab.jumlahRusak + jumlahRusak,
                 },
                 {
