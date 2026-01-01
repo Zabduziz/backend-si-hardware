@@ -266,6 +266,16 @@ const viewProblem = async(req, res) => {
                         attributes: []
                     }
                 ]
+            },
+            {
+                model: dataLabModel,
+                attributes: [],
+                include: [
+                    {
+                        model: barangModel,
+                        attributes: ['namaBarang']
+                    }
+                ]
             }
         ];
 
@@ -281,7 +291,8 @@ const viewProblem = async(req, res) => {
                     [sequelize.col('historyKegiatanModel.userModel.nama'), 'namaAssistant'],
                     [sequelize.col('historyKegiatanModel.userModel.idUser'), 'idUserAssistant'],
                     [sequelize.col('historyKegiatanModel.tanggal'), 'tanggalPraktikum'],
-                    [sequelize.col('historyKegiatanModel.idLab'), 'idLab']
+                    [sequelize.col('historyKegiatanModel.idLab'), 'idLab'],
+                    [sequelize.col('dataLabModel.barangModel.namaBarang'), 'namaBarang']
                 ]
             },
             include: includeCondition
