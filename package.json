@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "bun run src/app.js",
+    "dbtest": "cd src && bunx sequelize-cli db:migrate:undo:all && bunx sequelize-cli db:migrate && bunx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",

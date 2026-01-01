@@ -246,13 +246,45 @@ const viewPraktikumByDate = async(req, res) => {
 
 const viewProblem = async(req, res) => {
     try {
-        const allReport = await historyDetailModel.findAll({
-            where: {
-                isResolved: false,
-                jumlahRusak: {
-                    [Op.gte]: 0
-                }
+        const { idLab } = req.query;
+
+        const whereCondition = {
+            isResolved: false,
+            jumlahRusak: {
+                [Op.gte]: 0
             }
+        };
+
+        // Build include condition based on whether idLab is provided
+        const includeCondition = [
+            {
+                model: historyKegiatanModel,
+                attributes: [],
+                include: [
+                    {
+                        model: userModel,
+                        attributes: []
+                    }
+                ]
+            }
+        ];
+
+        // Add idLab filter to the include if provided
+        if (idLab) {
+            includeCondition[0].where = { idLab: idLab };
+        }
+
+        const allReport = await historyDetailModel.findAll({
+            where: whereCondition,
+            attributes: {
+                include: [
+                    [sequelize.col('historyKegiatanModel.userModel.nama'), 'namaAssistant'],
+                    [sequelize.col('historyKegiatanModel.userModel.idUser'), 'idUserAssistant'],
+                    [sequelize.col('historyKegiatanModel.tanggal'), 'tanggalPraktikum'],
+                    [sequelize.col('historyKegiatanModel.idLab'), 'idLab']
+                ]
+            },
+            include: includeCondition
         })
         if (allReport.length === 0) {
             return res.status(200).json({ message: "No report found." })
