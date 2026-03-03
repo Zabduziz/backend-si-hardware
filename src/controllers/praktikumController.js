@@ -163,7 +163,7 @@ const getDetailHistory = async (req, res) => {
                     ]
                 }
             ],
-            attributes: ['idHistory', 'jumlahAwal', 'jumlahAkhir', 'jumlahRusak'],
+            attributes: ['idHistory', 'jumlahAwal', 'jumlahAkhir', 'jumlahRusak', 'catatan'],
         })
         res.status(200).json({
             message: 'Histories successfully get!',
